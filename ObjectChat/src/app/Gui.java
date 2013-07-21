@@ -389,9 +389,7 @@ public class Gui {
 		scrollPane.setAutoscrolls(true);
 
 		statusLabel = new JLabel();
-		statusLabel.setMaximumSize(new Dimension(12, 12));
-		statusLabel.setIcon(new ImageIcon(Gui.class
-				.getResource("/resources/offline.png")));
+		statusLabel.setIcon(new ImageIcon(Gui.class.getResource("/resources/offline.png")));
 		mainFrame.getContentPane().add(statusLabel, "cell 0 8,alignx center");
 
 		typingArea = new JTextField();
