@@ -10,8 +10,6 @@ import net.miginfocom.swing.MigLayout;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.IOException;
@@ -86,11 +84,6 @@ public class Gui {
 	public void setStatusIcon(String statusIcon) {
 		statusLabel.setIcon(new ImageIcon(Gui.class.getResource(statusIcon)));
 		statusLabel.repaint();
-	}
-
-	public void takeMessage(String messageFromServer) {
-		append(messageFromServer);
-		chatArea.setCaretPosition(chatArea.getDocument().getLength());
 	}
 
 	public void append(String messageFromServer) {
@@ -181,64 +174,12 @@ public class Gui {
 			return false;
 	}
 
-	class joinListener implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			if (negotiatorInstance.clientStatus.equals("disconnected")) {
-				address = JOptionPane.showInputDialog(mainFrame,
-						"Enter server IP:", "", JOptionPane.QUESTION_MESSAGE);
-				userName = JOptionPane.showInputDialog(mainFrame,
-						"Enter your name:", "", JOptionPane.QUESTION_MESSAGE);
-				address = addressField.getText();
-				userName = nameField.getText();
-				negotiatorInstance.startClient();
-
-			} else
-				JOptionPane.showMessageDialog(mainFrame,
-						"You already connected to server", "",
-						JOptionPane.ERROR_MESSAGE);
-		}
-
-	}
-
 	class sendButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			String messageFromGui = typingArea.getText();
 			negotiatorInstance.sendMessage(messageFromGui);
 			typingArea.setText("");
-		}
-	}
-
-	class enterListener implements KeyListener {
-		@Override
-		public void keyPressed(KeyEvent ke) {
-			switch (ke.getKeyCode()) {
-			case KeyEvent.VK_ENTER:
-				sendButton.doClick();
-				break;
-			}
-		}
-
-		@Override
-		public void keyReleased(KeyEvent e) {
-		}
-
-		@Override
-		public void keyTyped(KeyEvent e) {
-		}
-	}
-
-	class changeNameListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			e.getActionCommand().equals("Name");
-			String lastName = userName;
-			userName = JOptionPane.showInputDialog(mainFrame,
-					"Enter your name:", "title", JOptionPane.QUESTION_MESSAGE);
-
-			String systemMessage = "<b>" + lastName + "</b>"
-					+ " changed name to: " + getUserName();
-			// ClientSystemMessanger.changeNameMessage(systemMessage);
 		}
 	}
 
@@ -253,7 +194,6 @@ public class Gui {
 				addressField.setEnabled(true);
 			}
 		}
-
 	}
 
 	class closeWindowListener implements WindowListener {
@@ -394,10 +334,9 @@ public class Gui {
 		typingArea.setMinimumSize(new Dimension(305, 20));
 		typingArea.setPreferredSize(new Dimension(0, 0));
 		mainFrame.getContentPane().add(typingArea, "cell 1 8 5 1,grow");
-		// typingArea.setColumns(50);
 		typingArea.addActionListener(new sendButtonListener());
 
-		JButton sendButton = new JButton("Send");
+		sendButton = new JButton("Send");
 		sendButton.setMinimumSize(new Dimension(85, 23));
 		mainFrame.getContentPane().add(sendButton, "cell 6 8,alignx left");
 		sendButton.addActionListener(new sendButtonListener());
@@ -433,5 +372,4 @@ public class Gui {
 			onlineUsersList.repaint();
 		}
 	}
-
 }
