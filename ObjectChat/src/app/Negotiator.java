@@ -1,6 +1,5 @@
 package app;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import app.Message.MessageType;
@@ -16,6 +15,10 @@ public class Negotiator {
 	private Server serverInstance;
 	ClientStatus clientStatus;
 	ConfigBuilder config;
+
+    private static final String OFFLINE_IMAGE = "/resources/offline.png";
+    private static final String ONLINE_IMAGE = "/resources/online.png";
+
 	enum ClientStatus {
 		CONNECTED, DISCONNECTED
 	}
@@ -24,6 +27,7 @@ public class Negotiator {
 		this.gui = Gui.getInstance();		
 		userArrayList = new ArrayList<String>();
 		clientStatus = ClientStatus.DISCONNECTED;
+        drawGuiStatus();
 		config = new ConfigBuilder();
 		setNameFromConfigFile();
 		setAddressFromConfigFile();
@@ -35,8 +39,8 @@ public class Negotiator {
 	}
 	
 	public void setAddressFromConfigFile() {
-		String adressFromConfig = config.adressFromConfig();
-		gui.getAddressField().setText(adressFromConfig);
+		String addressFromConfig = config.addressFromConfig();
+		gui.getAddressField().setText(addressFromConfig);
 	}
 	
 	public static Negotiator getInstance() {
@@ -44,9 +48,8 @@ public class Negotiator {
 		return instance;
 	}
 
-	public String getInternetAdress() {
-		String internetAdress = gui.getAddress();
-		return internetAdress;
+	public String getInternetAddress() {
+        return gui.getAddress();
 	}
 	
 	public void startServer() {
@@ -78,20 +81,16 @@ public class Negotiator {
 	public void drawGuiStatus() {
 		switch(clientStatus) {
 		case CONNECTED:
-			gui.setStatusIcon("/resources/online.png");
+			gui.setStatusIcon(ONLINE_IMAGE);
 			break;
 		case DISCONNECTED:
-			gui.setStatusIcon("/resources/offline.png");
+			gui.setStatusIcon(OFFLINE_IMAGE);
 			break;
 		}
 	}
 	
 	public void setCurrentMessage(Message currentDataMessage) {
 		message = currentDataMessage;
-	}
-	
-	public Message getCurrentMessage() {
-		return this.message;
 	}
 	
 	public String getCurrentContent() {
@@ -141,8 +140,8 @@ public class Negotiator {
 		}		
 	}
 	
-	public void sendMessage(String messagefromGui) {
-		message.setContent("<b>" + gui.getUserName() + "</b>" + ": " + messagefromGui);
+	public void sendMessage(String messageFromGui) {
+		message.setContent("<b>" + gui.getUserName() + "</b>" + ": " + messageFromGui);
 		message.messageType = MessageType.NORMAL;
 		clientMaster.writeObject(message);
 	}

@@ -26,7 +26,7 @@ public class ClientMaster implements Runnable {
 
 	public void setUpConnection() {
 		try {
-			chatSocket = new Socket(negotiatorInstance.getInternetAdress(), 1133);
+			chatSocket = new Socket(negotiatorInstance.getInternetAddress(), 1133);
 			if (chatSocket != null) {
 				createReaderThread();
 				negotiatorInstance.clientStatus = ClientStatus.CONNECTED;
@@ -76,10 +76,10 @@ public class ClientMaster implements Runnable {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			Object objectFromServer = null;
+			Object objectFromServer;
 			try {
 				while ((objectFromServer = objectReader.readObject()) != null) {
-					Message currentMessage = new Message();
+					Message currentMessage;
 					currentMessage = (Message) objectFromServer;
 					negotiatorInstance.setCurrentMessage(currentMessage);
 					negotiatorInstance.handleMessage(currentMessage);

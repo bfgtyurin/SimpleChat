@@ -16,15 +16,13 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 public class Gui {
 	private static Gui instance;
 	private JFrame mainFrame;
 	private JEditorPane chatArea;
 	private JTextField typingArea;
-	private JButton sendButton;
-	private String userName = null;
+    private String userName = null;
 	private String address = "localhost";
 	private JTextField addressField;
 	private JTextField nameField;
@@ -33,12 +31,15 @@ public class Gui {
 	private JRadioButton joinRadioButton;
 	private JButton connectButton;
 	private JList<String> onlineUsersList;
-	DefaultListModel<String> listModel = new DefaultListModel<String>();
+	final DefaultListModel<String> listModel = new DefaultListModel<String>();
 
 	private Negotiator negotiatorInstance;
-	private JScrollPane userListScroller;
 
-	private Gui() {
+    private static final String SEND_BUTTON = "send";
+    private static final String CONNECT_BUTTON = "Connect";
+    private static final String DISCONNECT_BUTTON = "Disconnect";
+
+    private Gui() {
 
 	}
 
@@ -86,7 +87,7 @@ public class Gui {
 		statusLabel.repaint();
 	}
 
-	public void append(String messageFromServer) {
+	void append(String messageFromServer) {
 		EditorKit editor = chatArea.getEditorKit();
 		StringReader reader = new StringReader(messageFromServer);
 		try {
@@ -122,23 +123,23 @@ public class Gui {
 		chatArea.setCaretPosition(chatArea.getDocument().getLength());
 	}
 
-	public void hideUserInterface() {
+	void hideUserInterface() {
 		nameField.setEnabled(false);
 		addressField.setEnabled(false);
-		connectButton.setText("Disconnect");
+		connectButton.setText(DISCONNECT_BUTTON);
 		hostRadioButton.setEnabled(false);
 		joinRadioButton.setEnabled(false);
 	}
 
-	public void showUserInterface() {
+	void showUserInterface() {
 		nameField.setEnabled(true);
 		addressField.setEnabled(true);
-		connectButton.setText("Connect");
+		connectButton.setText(CONNECT_BUTTON);
 		hostRadioButton.setEnabled(true);
 		joinRadioButton.setEnabled(true);
 	}
 
-	class hostListener implements ActionListener {
+	private class hostListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getActionCommand().equals("Connect")) {
@@ -166,7 +167,7 @@ public class Gui {
 		}
 	}
 
-	public Boolean validateNameField() {
+	Boolean validateNameField() {
 		if (nameField.getText().length() > 0) {
 			return true;
 		} else
@@ -174,7 +175,7 @@ public class Gui {
 			return false;
 	}
 
-	class sendButtonListener implements ActionListener {
+	private class sendButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			String messageFromGui = typingArea.getText();
@@ -183,7 +184,7 @@ public class Gui {
 		}
 	}
 
-	class radioButtonListener implements ActionListener {
+	private class radioButtonListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -196,7 +197,7 @@ public class Gui {
 		}
 	}
 
-	class closeWindowListener implements WindowListener {
+	private class closeWindowListener implements WindowListener {
 
 		@Override
 		public void windowActivated(WindowEvent e) {
@@ -301,12 +302,12 @@ public class Gui {
 		mainFrame.getContentPane().add(addressField, "cell 5 0,growx");
 		addressField.setColumns(10);
 
-		connectButton = new JButton("Connect");
+		connectButton = new JButton(CONNECT_BUTTON);
 		connectButton.setMinimumSize(new Dimension(85, 23));
 		mainFrame.getContentPane().add(connectButton, "cell 6 0,alignx left");
 		connectButton.addActionListener(new hostListener());
 
-		userListScroller = new JScrollPane();
+        JScrollPane userListScroller = new JScrollPane();
 		userListScroller
 				.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		mainFrame.getContentPane().add(userListScroller, "cell 0 1 1 7,grow");
@@ -327,7 +328,7 @@ public class Gui {
 		scrollPane.setAutoscrolls(true);
 
 		statusLabel = new JLabel();
-		statusLabel.setIcon(new ImageIcon(Gui.class.getResource("/resources/offline.png")));
+		//statusLabel.setIcon(new ImageIcon(Gui.class.getResource("/resources/offline.png")));
 		mainFrame.getContentPane().add(statusLabel, "cell 0 8,alignx center");
 
 		typingArea = new JTextField();
@@ -336,7 +337,7 @@ public class Gui {
 		mainFrame.getContentPane().add(typingArea, "cell 1 8 5 1,grow");
 		typingArea.addActionListener(new sendButtonListener());
 
-		sendButton = new JButton("Send");
+        JButton sendButton = new JButton(SEND_BUTTON);
 		sendButton.setMinimumSize(new Dimension(85, 23));
 		mainFrame.getContentPane().add(sendButton, "cell 6 8,alignx left");
 		sendButton.addActionListener(new sendButtonListener());
@@ -366,10 +367,9 @@ public class Gui {
 	}
 
 	public void setCurrentUserList(ArrayList<String> userList) {
-		Iterator<String> iterator = userList.iterator();
-		while (iterator.hasNext()) {
-			listModel.addElement(iterator.next());
-			onlineUsersList.repaint();
-		}
+        for (String anUserList : userList) {
+            listModel.addElement(anUserList);
+            onlineUsersList.repaint();
+        }
 	}
 }

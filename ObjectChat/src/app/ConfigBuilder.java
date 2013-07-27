@@ -8,10 +8,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class ConfigBuilder {
-	public void makeConfigFile(String name, String adress) {
+    private static final String CONFIG_PATH = "config.txt";
+	public void makeConfigFile(String name, String address) {
 		try {
-			FileWriter fileConfigWriter = new FileWriter("config.txt");
-			fileConfigWriter.write(name + "/" + adress);
+			FileWriter fileConfigWriter = new FileWriter(CONFIG_PATH);
+			fileConfigWriter.write(name + "/" + address);
 			fileConfigWriter.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -21,12 +22,12 @@ public class ConfigBuilder {
 	
 	public String nameFromConfig() {
 		String name = null;
-		File configFile = new File("config.txt");
+		File configFile = new File(CONFIG_PATH);
 		FileReader fileReader;
 		try {
 			fileReader = new FileReader(configFile);
 			BufferedReader bufferedReader = new BufferedReader(fileReader);
-			String line = null;
+			String line;
 			while((line = bufferedReader.readLine()) != null) {
 				int endIndex = line.indexOf("/");
 				name = line.substring(0, endIndex);
@@ -43,17 +44,17 @@ public class ConfigBuilder {
 		return name;
 	}
 	
-	public String adressFromConfig() {
-		String adress = null;
-		File configFile = new File("config.txt");
+	public String addressFromConfig() {
+		String address = null;
+		File configFile = new File(CONFIG_PATH);
 		FileReader fileReader;
 		try {
 			fileReader = new FileReader(configFile);
 			BufferedReader bufferedReader = new BufferedReader(fileReader);
-			String line = null;
+			String line;
 			while((line = bufferedReader.readLine()) != null) {
 				int beginIndex = line.indexOf("/");
-				adress = line.substring(beginIndex + 1);
+				address = line.substring(beginIndex + 1);
 			}
 			bufferedReader.close();			
 		} catch (FileNotFoundException e) {
@@ -63,6 +64,6 @@ public class ConfigBuilder {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return adress;
+		return address;
 	}
 }
