@@ -80,8 +80,7 @@ public class Server implements Runnable {
 	}
 	
 	public String getStringFromArrayList() {
-		String userList = userArrayList.toString();
-		return userList;
+		return userArrayList.toString();
 	}
 	
 	
